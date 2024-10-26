@@ -26,3 +26,12 @@ createdb:
 
 dropdb:
 	@docker exec -it ${DB_CONTAINER_NAME} dropdb ${DB_NAME}
+
+migration:
+	@migrate create -ext sql -dir db/migration -seq init_schema
+
+migrateup:
+	@migrate -path db/migration -database "$(DB_URL)" -verbose up
+
+migratedown:
+	@migrate -path db/migration -database "$(DB_URL)" -verbose down
