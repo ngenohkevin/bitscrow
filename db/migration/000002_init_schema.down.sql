@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS disputes CASCADE;
+DROP TABLE IF EXISTS escrow_transactions CASCADE;
