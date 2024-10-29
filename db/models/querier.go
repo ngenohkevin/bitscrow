@@ -9,8 +9,11 @@ import (
 )
 
 type Querier interface {
+	CreateDisputes(ctx context.Context, arg CreateDisputesParams) (Dispute, error)
 	CreateEscrowTransactions(ctx context.Context, arg CreateEscrowTransactionsParams) (EscrowTransaction, error)
+	GetDisputes(ctx context.Context, id int32) (Dispute, error)
 	GetEscrowTransactions(ctx context.Context, id int32) (EscrowTransaction, error)
+	UpdateDisputes(ctx context.Context, arg UpdateDisputesParams) error
 	UpdateEscrowTransactions(ctx context.Context, arg UpdateEscrowTransactionsParams) error
 }
 
