@@ -35,3 +35,8 @@ migrateup:
 
 migratedown:
 	@migrate -path db/migration -database "$(DB_URL)" -verbose down
+
+sqlc:
+	@sqlc generate
+
+.PHONY: up down background start_container stop_container rm_container postgres createdb dropdb migration migrateup migratedown sqlc
