@@ -36,3 +36,19 @@ func createRandomTransaction(t *testing.T) db.EscrowTransaction {
 func TestCreateEscrowTransaction(t *testing.T) {
 	createRandomTransaction(t)
 }
+
+func TestGetEscrowTransaction(t *testing.T) {
+	transaction1 := createRandomTransaction(t)
+	transaction2, err := testStore.GetEscrowTransactions(context.Background(), transaction1.ID)
+	require.NoError(t, err)
+	require.NotEmpty(t, transaction2)
+
+	require.Equal(t, transaction1.ID, transaction2.ID)
+	require.Equal(t, transaction1.BuyerID, transaction2.BuyerID)
+	require.Equal(t, transaction1.SellerID, transaction2.SellerID)
+	require.Equal(t, transaction1.BitcoinAddress, transaction2.BitcoinAddress)
+	require.Equal(t, transaction1.Amount, transaction2.Amount)
+	require.Equal(t, transaction1.Status, transaction2.Status)
+	//require.WithinDuration(t, transaction1.CreatedAt, transaction2.CreatedAt, time.Second)
+
+}
