@@ -29,10 +29,6 @@ func RandomInt(min, max int) int {
 	return min + rand.Intn(max-min)
 }
 
-func RandomFloat(min, max int) float64 {
-	return float64(min + rand.Intn(max-min))
-}
-
 func GenerateRandomID() uuid.UUID {
 	return uuid.New()
 }
