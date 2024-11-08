@@ -7,6 +7,7 @@ package db
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -18,13 +19,13 @@ VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, escrow_id, reason, resolved, r
 `
 
 type CreateDisputesParams struct {
-	ID         uuid.UUID        `json:"id"`
-	EscrowID   pgtype.UUID      `json:"escrow_id"`
-	Reason     string           `json:"reason"`
-	Resolved   pgtype.Bool      `json:"resolved"`
-	Resolution pgtype.Text      `json:"resolution"`
-	CreatedAt  pgtype.Timestamp `json:"created_at"`
-	UpdatedAt  pgtype.Timestamp `json:"updated_at"`
+	ID         uuid.UUID          `json:"id"`
+	EscrowID   pgtype.UUID        `json:"escrow_id"`
+	Reason     string             `json:"reason"`
+	Resolved   pgtype.Bool        `json:"resolved"`
+	Resolution pgtype.Text        `json:"resolution"`
+	CreatedAt  time.Time          `json:"created_at"`
+	UpdatedAt  pgtype.Timestamptz `json:"updated_at"`
 }
 
 func (q *Queries) CreateDisputes(ctx context.Context, arg CreateDisputesParams) (Dispute, error) {
@@ -77,13 +78,13 @@ RETURNING id, escrow_id, reason, resolved, resolution, created_at, updated_at
 `
 
 type UpdateDisputesParams struct {
-	ID         uuid.UUID        `json:"id"`
-	EscrowID   pgtype.UUID      `json:"escrow_id"`
-	Reason     string           `json:"reason"`
-	Resolved   pgtype.Bool      `json:"resolved"`
-	Resolution pgtype.Text      `json:"resolution"`
-	CreatedAt  pgtype.Timestamp `json:"created_at"`
-	UpdatedAt  pgtype.Timestamp `json:"updated_at"`
+	ID         uuid.UUID          `json:"id"`
+	EscrowID   pgtype.UUID        `json:"escrow_id"`
+	Reason     string             `json:"reason"`
+	Resolved   pgtype.Bool        `json:"resolved"`
+	Resolution pgtype.Text        `json:"resolution"`
+	CreatedAt  time.Time          `json:"created_at"`
+	UpdatedAt  pgtype.Timestamptz `json:"updated_at"`
 }
 
 func (q *Queries) UpdateDisputes(ctx context.Context, arg UpdateDisputesParams) error {
