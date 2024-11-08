@@ -6,13 +6,15 @@ package db
 
 import (
 	"context"
+
+	"github.com/google/uuid"
 )
 
 type Querier interface {
 	CreateDisputes(ctx context.Context, arg CreateDisputesParams) (Dispute, error)
 	CreateEscrowTransactions(ctx context.Context, arg CreateEscrowTransactionsParams) (EscrowTransaction, error)
-	GetDisputes(ctx context.Context, id int32) (Dispute, error)
-	GetEscrowTransactions(ctx context.Context, id int32) (EscrowTransaction, error)
+	GetDisputes(ctx context.Context, id uuid.UUID) (Dispute, error)
+	GetEscrowTransactions(ctx context.Context, id uuid.UUID) (EscrowTransaction, error)
 	UpdateDisputes(ctx context.Context, arg UpdateDisputesParams) error
 	UpdateEscrowTransactions(ctx context.Context, arg UpdateEscrowTransactionsParams) error
 }
