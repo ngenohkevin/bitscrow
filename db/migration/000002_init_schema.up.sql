@@ -5,7 +5,7 @@ CREATE TABLE escrow_transactions (
                                      bitcoin_address VARCHAR(255) NOT NULL,
                                      amount NUMERIC(10,2) NOT NULL,
                                      status VARCHAR(50) CHECK (status IN ('pending', 'confirmed', 'disputed', 'released')),
-                                     created_at TIMESTAMP DEFAULT NOW()
+                                     created_at timestamptz NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE disputes (
@@ -14,6 +14,6 @@ CREATE TABLE disputes (
                           reason TEXT NOT NULL,
                           resolved BOOLEAN DEFAULT FALSE,
                           resolution TEXT,
-                          created_at TIMESTAMP DEFAULT NOW(),
-                          updated_at TIMESTAMP DEFAULT NOW()
+                          created_at timestamptz NOT NULL DEFAULT NOW(),
+                          updated_at timestamptz DEFAULT NOW()
 );
