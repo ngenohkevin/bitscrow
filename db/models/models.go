@@ -5,12 +5,13 @@
 package db
 
 import (
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Dispute struct {
-	ID         int32            `json:"id"`
-	EscrowID   pgtype.Int4      `json:"escrow_id"`
+	ID         uuid.UUID        `json:"id"`
+	EscrowID   pgtype.UUID      `json:"escrow_id"`
 	Reason     string           `json:"reason"`
 	Resolved   pgtype.Bool      `json:"resolved"`
 	Resolution pgtype.Text      `json:"resolution"`
@@ -19,9 +20,9 @@ type Dispute struct {
 }
 
 type EscrowTransaction struct {
-	ID             int32            `json:"id"`
-	BuyerID        int32            `json:"buyer_id"`
-	SellerID       int32            `json:"seller_id"`
+	ID             uuid.UUID        `json:"id"`
+	BuyerID        uuid.UUID        `json:"buyer_id"`
+	SellerID       uuid.UUID        `json:"seller_id"`
 	BitcoinAddress string           `json:"bitcoin_address"`
 	Amount         pgtype.Numeric   `json:"amount"`
 	Status         pgtype.Text      `json:"status"`
