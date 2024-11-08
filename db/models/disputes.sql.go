@@ -8,6 +8,7 @@ package db
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -17,8 +18,8 @@ VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, escrow_id, reason, resolved, r
 `
 
 type CreateDisputesParams struct {
-	ID         int32            `json:"id"`
-	EscrowID   pgtype.Int4      `json:"escrow_id"`
+	ID         uuid.UUID        `json:"id"`
+	EscrowID   pgtype.UUID      `json:"escrow_id"`
 	Reason     string           `json:"reason"`
 	Resolved   pgtype.Bool      `json:"resolved"`
 	Resolution pgtype.Text      `json:"resolution"`
@@ -53,7 +54,7 @@ const getDisputes = `-- name: GetDisputes :one
 SELECT id, escrow_id, reason, resolved, resolution, created_at, updated_at FROM disputes WHERE id = $1
 `
 
-func (q *Queries) GetDisputes(ctx context.Context, id int32) (Dispute, error) {
+func (q *Queries) GetDisputes(ctx context.Context, id uuid.UUID) (Dispute, error) {
 	row := q.db.QueryRow(ctx, getDisputes, id)
 	var i Dispute
 	err := row.Scan(
@@ -76,8 +77,8 @@ RETURNING id, escrow_id, reason, resolved, resolution, created_at, updated_at
 `
 
 type UpdateDisputesParams struct {
-	ID         int32            `json:"id"`
-	EscrowID   pgtype.Int4      `json:"escrow_id"`
+	ID         uuid.UUID        `json:"id"`
+	EscrowID   pgtype.UUID      `json:"escrow_id"`
 	Reason     string           `json:"reason"`
 	Resolved   pgtype.Bool      `json:"resolved"`
 	Resolution pgtype.Text      `json:"resolution"`
