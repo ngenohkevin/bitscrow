@@ -34,7 +34,7 @@ func GenerateRandomID() uuid.UUID {
 }
 
 func RandomBitcoinAddress() string {
-	return "bc1" + RandomString(29)
+	return "bc1" + RandomString(32)
 }
 
 func RandomStatus() pgtype.Text {
