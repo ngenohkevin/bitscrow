@@ -16,7 +16,7 @@ type Querier interface {
 	GetDisputes(ctx context.Context, id uuid.UUID) (Dispute, error)
 	GetEscrowTransactions(ctx context.Context, id uuid.UUID) (EscrowTransaction, error)
 	UpdateDisputes(ctx context.Context, arg UpdateDisputesParams) error
-	UpdateEscrowTransactions(ctx context.Context, arg UpdateEscrowTransactionsParams) error
+	UpdateEscrowTransactions(ctx context.Context, arg UpdateEscrowTransactionsParams) (EscrowTransaction, error)
 }
 
 var _ Querier = (*Queries)(nil)
