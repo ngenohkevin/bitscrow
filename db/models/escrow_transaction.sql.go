@@ -67,7 +67,7 @@ func (q *Queries) GetEscrowTransactions(ctx context.Context, id uuid.UUID) (Escr
 	return i, err
 }
 
-const updateEscrowTransactions = `-- name: UpdateEscrowTransactions :exec
+const updateEscrowTransactions = `-- name: UpdateEscrowTransactions :one
 UPDATE escrow_transactions
 SET buyer_id = $2, seller_id = $3, bitcoin_address = $4, amount = $5, status = $6
 WHERE id = $1
@@ -83,8 +83,8 @@ type UpdateEscrowTransactionsParams struct {
 	Status         pgtype.Text    `json:"status"`
 }
 
-func (q *Queries) UpdateEscrowTransactions(ctx context.Context, arg UpdateEscrowTransactionsParams) error {
-	_, err := q.db.Exec(ctx, updateEscrowTransactions,
+func (q *Queries) UpdateEscrowTransactions(ctx context.Context, arg UpdateEscrowTransactionsParams) (EscrowTransaction, error) {
+	row := q.db.QueryRow(ctx, updateEscrowTransactions,
 		arg.ID,
 		arg.BuyerID,
 		arg.SellerID,
@@ -92,5 +92,15 @@ func (q *Queries) UpdateEscrowTransactions(ctx context.Context, arg UpdateEscrow
 		arg.Amount,
 		arg.Status,
 	)
-	return err
+	var i EscrowTransaction
+	err := row.Scan(
+		&i.ID,
+		&i.BuyerID,
+		&i.SellerID,
+		&i.BitcoinAddress,
+		&i.Amount,
+		&i.Status,
+		&i.CreatedAt,
+	)
+	return i, err
 }
