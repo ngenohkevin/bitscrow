@@ -2,10 +2,12 @@ package tests
 
 import (
 	"context"
+	"fmt"
 	"github.com/ngenohkevin/bitscrow/config"
 	db "github.com/ngenohkevin/bitscrow/db/models"
 	"github.com/stretchr/testify/require"
 	"testing"
+	"time"
 )
 
 func createRandomTransaction(t *testing.T) db.EscrowTransaction {
@@ -49,6 +51,36 @@ func TestGetEscrowTransaction(t *testing.T) {
 	require.Equal(t, transaction1.BitcoinAddress, transaction2.BitcoinAddress)
 	require.Equal(t, transaction1.Amount, transaction2.Amount)
 	require.Equal(t, transaction1.Status, transaction2.Status)
-	//require.WithinDuration(t, transaction1.CreatedAt, transaction2.CreatedAt, time.Second)
+	require.WithinDuration(t, transaction1.CreatedAt, transaction2.CreatedAt, time.Second)
+}
+
+func TestUpdateEscrowTransaction(t *testing.T) {
+	transaction1 := createRandomTransaction(t)
+
+	arg := db.UpdateEscrowTransactionsParams{
+		ID:             config.GenerateRandomID(),
+		BuyerID:        config.GenerateRandomID(),
+		SellerID:       config.GenerateRandomID(),
+		BitcoinAddress: config.RandomBitcoinAddress(),
+		Amount:         config.RandomAmount(),
+		Status:         config.RandomStatus(),
+	}
+
+	//err := testStore.UpdateEscrowTransactions(context.Background(), arg)
+	//require.NoError(t, err)
+
+	transaction2, err := testStore.UpdateEscrowTransactions(context.Background(), arg)
+	fmt.Printf("transaction 1 -- %v\n", transaction1)
+	fmt.Printf("transaction 2 -- %v", transaction2)
+	require.NoError(t, err)
+	require.NotEmpty(t, transaction2)
+
+	require.Equal(t, arg.ID, transaction2.ID)
+	require.Equal(t, arg.BuyerID, transaction2.BuyerID)
+	require.Equal(t, arg.SellerID, transaction2.SellerID)
+	require.Equal(t, arg.BitcoinAddress, transaction2.BitcoinAddress)
+	require.Equal(t, arg.Amount, transaction2.Amount)
+	require.Equal(t, arg.Status, transaction2.Status)
+	require.WithinDuration(t, transaction1.CreatedAt, transaction2.CreatedAt, time.Second)
 
 }
