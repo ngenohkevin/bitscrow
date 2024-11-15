@@ -69,28 +69,26 @@ func (q *Queries) GetEscrowTransactions(ctx context.Context, id uuid.UUID) (Escr
 
 const updateEscrowTransactions = `-- name: UpdateEscrowTransactions :one
 UPDATE escrow_transactions
-SET buyer_id = $2, seller_id = $3, bitcoin_address = $4, amount = $5, status = $6
-WHERE id = $1
+SET bitcoin_address = COALESCE($1, bitcoin_address),
+    amount = COALESCE($2, amount),
+    status = COALESCE($3, status)
+WHERE id = $4
 RETURNING id, buyer_id, seller_id, bitcoin_address, amount, status, created_at
 `
 
 type UpdateEscrowTransactionsParams struct {
-	ID             uuid.UUID      `json:"id"`
-	BuyerID        uuid.UUID      `json:"buyer_id"`
-	SellerID       uuid.UUID      `json:"seller_id"`
-	BitcoinAddress string         `json:"bitcoin_address"`
+	BitcoinAddress pgtype.Text    `json:"bitcoin_address"`
 	Amount         pgtype.Numeric `json:"amount"`
 	Status         pgtype.Text    `json:"status"`
+	ID             uuid.UUID      `json:"id"`
 }
 
 func (q *Queries) UpdateEscrowTransactions(ctx context.Context, arg UpdateEscrowTransactionsParams) (EscrowTransaction, error) {
 	row := q.db.QueryRow(ctx, updateEscrowTransactions,
-		arg.ID,
-		arg.BuyerID,
-		arg.SellerID,
 		arg.BitcoinAddress,
 		arg.Amount,
 		arg.Status,
+		arg.ID,
 	)
 	var i EscrowTransaction
 	err := row.Scan(
